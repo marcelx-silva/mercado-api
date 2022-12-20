@@ -16,7 +16,8 @@ public class Privilege implements GrantedAuthority {
     private UUID uuid;
     @Column(name = "name",unique = true,nullable = false)
     private String name;
-
+    @ManyToMany(mappedBy = "privileges")
+    private Set<Role> role;
     public Privilege(String name){
         this.name = name;
     }
