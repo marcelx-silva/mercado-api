@@ -22,10 +22,7 @@ public class ImageProductServiceH2 implements ImageProductService{
     @Override
     @Transactional
     public void save(ImageProductDTO imageProductDTO) {
-        System.out.println(imageProductDTO.getName());
-        System.out.println(imageProductDTO.getUrl());
         ImageProduct imageProduct = modelMapper.map(imageProductDTO,ImageProduct.class);
-        System.out.println(imageProduct.getUuid());
         imageProductRepository.save(imageProduct);
     }
 
