@@ -4,7 +4,6 @@ import com.newgo.mercadoapi.domain.dto.ProductDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
-import com.newgo.mercadoapi.service.product.ImageProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
