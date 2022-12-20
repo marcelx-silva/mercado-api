@@ -14,5 +14,5 @@ import java.util.Set;
 public class ShoppingListRequestDTO {
     private String name;
     private String description;
-    private Set<ProductDTO> productDTOSet;
+    private Set<ProductListDTO> productDTOSet;
 }
