@@ -1,6 +1,7 @@
 package com.newgo.mercadoapi.controller;
 
-
+import com.newgo.mercadoapi.service.shoppinglistproduct.ShoppingListProductServiceH2;
+import com.newgo.mercadoapi.domain.dto.ProductAddListDTO;
 import com.newgo.mercadoapi.domain.dto.ShoppingListCreateDTO;
 import com.newgo.mercadoapi.domain.dto.ShoppingListRequestDTO;
 import com.newgo.mercadoapi.service.shoppinglist.ShoppingListService;
@@ -21,6 +22,8 @@ public class ShoppingListController {
     ShoppingListService shoppingListService;
     @Autowired
     ModelMapper modelMapper;
+    @Autowired
+    ShoppingListProductServiceH2 shoppingListProductServiceH2;
 
     @PostMapping("/create")
     public ResponseEntity<Object> saveList(Principal principal,@RequestBody ShoppingListCreateDTO shoppingListCreateDTO) {
@@ -56,5 +59,14 @@ public class ShoppingListController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("List Deleted");
+    }
+    @PostMapping("/listName/product")
+    public ResponseEntity<Object> addProduct(Principal principal,
+                                             @RequestParam("name") String listName,
+                                             @RequestBody ProductAddListDTO productAddListDTO){
+
+        productAddListDTO.setListName(listName);
+        shoppingListProductServiceH2.addProduct(principal.getName(), productAddListDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("Produto Adicionado");
     }
 }
