@@ -1,9 +1,6 @@
 package com.newgo.mercadoapi.domain.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -31,6 +28,14 @@ public class Product {
     @OneToOne
     @JoinColumn(name = "image_id",referencedColumnName = "uuid")
     private ImageProduct imageProduct;
+
+    public Product(String name, String description, Boolean status, Integer quantity, ImageProduct imageProduct) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.quantity = quantity;
+        this.imageProduct = imageProduct;
+    }
 
     @Override
     public boolean equals(Object o) {
