@@ -26,7 +26,6 @@ public class ProductServiceH2 implements ProductService {
     @Autowired
     ImageProductService imageProductService;
 
-
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
@@ -73,5 +72,11 @@ public class ProductServiceH2 implements ProductService {
                 forEach(product -> productDTOSet.
                         add(converterDTO.toDTO(product)));
         return productDTOSet;
+    }
+
+    @Override
+    @Transactional
+    public void updateProduct(UUID uuid, ProductDTO productDTO) {
+        productRepository.updateProduct(uuid,productDTO);
     }
 }

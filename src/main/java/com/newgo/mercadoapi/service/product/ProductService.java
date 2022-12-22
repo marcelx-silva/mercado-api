@@ -14,4 +14,5 @@ public interface ProductService {
     void deleteById(UUID uuid);
     void deleteByName(String name);
     Set<ProductDTO> findAllByAtivadoIsTrue();
+    void updateProduct(UUID uuid,ProductDTO productDTO);
 }
