@@ -22,8 +22,8 @@ public class ShoppingListController {
     @Autowired
     ModelMapper modelMapper;
 
-    @PostMapping
-    public ResponseEntity<Object> saveList(Principal principal, ShoppingListCreateDTO shoppingListCreateDTO) {
+    @PostMapping("/create")
+    public ResponseEntity<Object> saveList(Principal principal,@RequestBody ShoppingListCreateDTO shoppingListCreateDTO) {
         shoppingListService.save(principal.getName(), shoppingListCreateDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -32,7 +32,7 @@ public class ShoppingListController {
     }
 
 
-    @GetMapping
+    @GetMapping("/listName")
     public ResponseEntity<Object> getUniqueShoppingList(Principal principal, @RequestParam("name") String listName) {
         ShoppingListRequestDTO shoppingListRequestDTO =
                 modelMapper
@@ -43,14 +43,14 @@ public class ShoppingListController {
                 .body(shoppingListRequestDTO);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Object> getAllShoppingList(Principal principal) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(shoppingListService.findAllByUser(principal.getName()));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/deleteByName")
     public ResponseEntity<Object> deleteShoppingList(Principal principal, @RequestParam("name") String listName) {
         shoppingListService.deleteByName(principal.getName(), listName);
         return ResponseEntity

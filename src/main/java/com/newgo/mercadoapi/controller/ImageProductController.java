@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/image/adm")
 public class ImageProductController {
 
     @Autowired
@@ -39,7 +39,7 @@ public class ImageProductController {
         return ResponseEntity.status(HttpStatus.OK).body(imageProductDTO);
     }
 
-    @GetMapping("/save/product/{id}")
+    @GetMapping("/product/{id}")
     public ResponseEntity<Object> saveImageToProduct(@PathVariable("id") UUID productId,ImageProductDTO imageProductDTO){
         Optional<ProductDTO> product = productService.findById(productId);
         if (product.isEmpty())
