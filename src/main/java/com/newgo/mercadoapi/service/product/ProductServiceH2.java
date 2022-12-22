@@ -1,6 +1,7 @@
 package com.newgo.mercadoapi.service.product;
 
 import com.newgo.mercadoapi.domain.dto.ProductDTO;
+import com.newgo.mercadoapi.domain.mappers.ConverterDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
@@ -23,6 +24,8 @@ public class ProductServiceH2 implements ProductService {
     ModelMapper modelMapper;
 
     @Autowired
+    ConverterDTO<Product,ProductDTO> converterDTO;
+    @Autowired
     ImageProductService imageProductService;
 
 
@@ -37,20 +40,20 @@ public class ProductServiceH2 implements ProductService {
     @Override
     public Set<ProductDTO> findAll() {
         Set<ProductDTO> productDTOSet = new HashSet<>();
-        productRepository.findAll().
-                forEach(product -> productDTOSet.
-                        add(modelMapper.map(product,ProductDTO.class)));
+        productRepository.findAll().forEach(product -> productDTOSet.add(converterDTO.toDTO(product)));
         return productDTOSet;
     }
 
     @Override
     public Optional<ProductDTO> findById(UUID uuid) {
-        return Optional.ofNullable(modelMapper.map(productRepository.findById(uuid), ProductDTO.class));
+        Optional<Product> product = productRepository.findById(uuid);
+        return Optional.ofNullable(converterDTO.toDTO(product.get()));
     }
 
     @Override
     public Optional<ProductDTO> findByName(String name) {
-        return Optional.ofNullable(modelMapper.map(productRepository.findProductByName(name), ProductDTO.class));
+        Optional<Product> product = productRepository.findProductByName(name);
+        return Optional.ofNullable(converterDTO.toDTO(product.get()));
     }
 
     @Override
@@ -70,7 +73,7 @@ public class ProductServiceH2 implements ProductService {
         Set<ProductDTO> productDTOSet = new HashSet<>();
         productRepository.findAllByStatusIsTrue().
                 forEach(product -> productDTOSet.
-                        add(modelMapper.map(product,ProductDTO.class)));
+                        add(converterDTO.toDTO(product)));
         return productDTOSet;
     }
 }
