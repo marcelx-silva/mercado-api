@@ -102,7 +102,6 @@ public class SetupDataLoaderUser implements ApplicationListener<ContextRefreshed
         customer.setPassword(bCryptPasswordEncoder.encode("senhaTestCustomer"));
         customer.setRoles(role);
         userRepository.save(customer);
-        System.out.println(userRepository.findUserByEmail(customer.getEmail()));
     }
 
     @Transactional
@@ -117,6 +116,5 @@ public class SetupDataLoaderUser implements ApplicationListener<ContextRefreshed
         administrator.setEmail("admTest@gmail.com");
         administrator.setRoles(role);
         userRepository.save(administrator);
-        System.out.println(userRepository.findUserByEmail(administrator.getEmail()).toString());
     }
 }
