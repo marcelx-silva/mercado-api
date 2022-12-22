@@ -84,18 +84,6 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @PutMapping("/adm/update")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateProdutoByName(@RequestParam(value = "name") String name, @RequestBody ProductDTO productDTO) {
-        Optional<ProductDTO> product = productService.findByName(name);
-        if (product.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
-
-        BeanUtils.copyProperties(productDTO, product);
-        productService.save(product.get());
-        return ResponseEntity.ok().body(product);
-    }
-
     @PutMapping("/adm/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> updateProdutoById(@PathVariable("id") UUID uuid, @RequestBody ProductDTO productDTO) {

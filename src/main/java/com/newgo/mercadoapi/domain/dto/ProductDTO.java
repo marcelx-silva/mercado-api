@@ -13,5 +13,6 @@ public class ProductDTO {
     private String name;
     private String description;
     private String imageProductURL;
-    private Integer amount;
+    private Integer quantity;
+    private Boolean status;
 }
