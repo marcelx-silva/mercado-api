@@ -19,10 +19,8 @@ import java.util.UUID;
 public class ProductServiceH2 implements ProductService {
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     ModelMapper modelMapper;
-
     @Autowired
     ConverterDTO<Product,ProductDTO> converterDTO;
     @Autowired

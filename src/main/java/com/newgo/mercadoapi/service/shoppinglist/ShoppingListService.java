@@ -3,7 +3,6 @@ package com.newgo.mercadoapi.service.shoppinglist;
 import com.newgo.mercadoapi.domain.dto.ShoppingListCreateDTO;
 import com.newgo.mercadoapi.domain.dto.ShoppingListRequestDTO;
 
-import java.security.Principal;
 import java.util.Set;
 
 public interface ShoppingListService {
