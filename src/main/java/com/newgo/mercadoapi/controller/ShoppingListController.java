@@ -67,7 +67,7 @@ public class ShoppingListController {
 
         productAddListDTO.setListName(listName);
         productAddListDTO.setUser(principal.getName());
-        shoppingListProductServiceH2.addProduct(productAddListDTO);
+        shoppingListProductServiceH2.addProductToList(productAddListDTO);
         return ResponseEntity.status(HttpStatus.OK).body("Produto Adicionado");
     }
 }

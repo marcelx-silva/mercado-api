@@ -44,33 +44,42 @@ public class ShoppingListProductServiceH2 {
     }
 
     @Transactional
-    public void addProduct(ProductAddListDTO productAddListDTO){
+    public void addProductToList(ProductAddListDTO productAddListDTO) {
         Optional<User> userOptional = userRepository.findUserByUsername(productAddListDTO.getUser());
         Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
 
-        if (userOptional.isEmpty() || productOptional.isEmpty())
-            return;
+        isUserAndProductEmpty(userOptional, productOptional);
 
-        changeProductQuantity(productOptional.get()
-                , productAddListDTO.getAmount());
+        setQuantity(productOptional.get(), productAddListDTO.getAmount());
 
         Optional<ShoppingList> shoppingList =
-                Optional.ofNullable(shoppingListRepository
-                        .findShoppingListByNameAndUser(
-                                productAddListDTO.getListName(),
-                                userOptional.get()));
+                getListFromUser(productOptional.get().getName(),userOptional.get());
 
-        ShoppingListProduct listProduct = new ShoppingListProduct(shoppingList.get(),productOptional.get(),productAddListDTO.getAmount());
+        ShoppingListProduct listProduct =
+                new ShoppingListProduct(shoppingList.get(),
+                        productOptional.get(),
+                        productAddListDTO.getAmount());
+
         shoppingListProductRepository.save(listProduct);
     }
 
     @Transactional
-    void changeProductQuantity(Product product, Integer amountToBeAdded){
+    void setQuantity(Product product, Integer amountToBeAdded) {
         int newQuantity = product.getQuantity() - amountToBeAdded;
 
-        if (newQuantity<0)
-            return;
+        if (newQuantity < 0)
+            throw new RuntimeException();
 
-        productRepository.setProductNewQuantity(newQuantity,product.getName());
+        productRepository.setProductNewQuantity(newQuantity, product.getName());
+    }
+
+    private void isUserAndProductEmpty(Optional<User> userOptional, Optional<Product> productOptional) {
+        if (userOptional.isEmpty() || productOptional.isEmpty())
+            throw new RuntimeException();
+    }
+
+    private Optional<ShoppingList> getListFromUser(String listName, User user) {
+        return Optional.ofNullable(shoppingListRepository
+                .findShoppingListByNameAndUser(listName, user));
     }
 }
