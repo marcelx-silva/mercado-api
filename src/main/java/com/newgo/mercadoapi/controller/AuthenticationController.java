@@ -23,7 +23,6 @@ public class AuthenticationController {
 
     @PostMapping("/user/login")
     public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
-        System.out.println(loginDTO.getUsername());
         userDetailsServiceImpl.verifyUserPassword(loginDTO);
         String token = jwtTokenUtil.generateAccessToken(loginDTO.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(new AuthResponseDTO(token));
