@@ -69,4 +69,17 @@ public class ShoppingListController {
         shoppingListProductServiceH2.addProductToList(productAddListDTO);
         return ResponseEntity.status(HttpStatus.OK).body("Produto Adicionado");
     }
+
+    @DeleteMapping ("/listName/product/remove")
+    public ResponseEntity<Object> removeProduct(Principal principal,
+                                                @RequestParam("name") String listName,
+                                                @RequestParam("product") String productName){
+
+
+        ProductAddListDTO productAddListDTO =
+                new ProductAddListDTO(productName,null,listName,principal.getName());
+
+        shoppingListProductServiceH2.removeProductFromList(productAddListDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("Produto Removido da Lista");
+    }
 }
