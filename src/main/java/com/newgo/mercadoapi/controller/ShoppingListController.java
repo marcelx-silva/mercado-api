@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/list-product")
-
+@RequestMapping("/list/product")
 public class ShoppingListController {
     @Autowired
     ShoppingListService shoppingListService;
