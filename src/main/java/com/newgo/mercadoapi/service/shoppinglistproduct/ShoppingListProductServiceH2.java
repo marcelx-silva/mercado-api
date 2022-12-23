@@ -79,6 +79,24 @@ public class ShoppingListProductServiceH2 {
     }
 
     @Transactional
+    public void changeProductQuantity(ProductAddListDTO productAddListDTO) {
+        Optional<User> userOptional = userRepository.findUserByUsername(productAddListDTO.getUser());
+        Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
+        isUserAndProductEmpty(userOptional, productOptional);
+
+        Optional<ShoppingList> shoppingList =
+                getListFromUser(productAddListDTO.getListName(), userOptional.get());
+
+        shoppingListProductRepository
+                .changeProductQuantityFromList(productOptional.get().getUuid(),
+                        shoppingList.get().getUuid(),
+                        productAddListDTO.getAmount());
+
+
+        setQuantity(productOptional.get(), productAddListDTO.getAmount());
+    }
+
+    @Transactional
     void setQuantity(Product product, Integer amountToBeAdded) {
         int newQuantity = product.getQuantity() - amountToBeAdded;
 
