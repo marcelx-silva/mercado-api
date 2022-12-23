@@ -94,4 +94,15 @@ public class ProductController {
         productService.updateProduct(uuid,productDTO);
         return ResponseEntity.ok().body(productService.findById(uuid));
     }
+
+    @PutMapping("/adm/update/{id}/status")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> updateProductStatus(@PathVariable("id") UUID uuid) {
+        Optional<ProductDTO> product = productService.findById(uuid);
+        if (product.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
+
+        productService.updateProductStatus(uuid);
+        return ResponseEntity.ok().body(productService.findById(uuid));
+    }
 }
