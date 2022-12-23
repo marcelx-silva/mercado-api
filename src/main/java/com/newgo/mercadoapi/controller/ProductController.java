@@ -39,7 +39,7 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @PostMapping("/adm/save/product")
+    @PostMapping("/adm/save/product/image")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> saveWithImage(@RequestPart("img") MultipartFile multipartFile,
                                         @RequestParam String descImg,
@@ -64,7 +64,7 @@ public class ProductController {
 
 
         productService.save(productDTO);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(productService.findByName(nameProd));
     }
 
     @GetMapping("/adm/all")
