@@ -82,4 +82,17 @@ public class ShoppingListController {
         shoppingListProductServiceH2.removeProductFromList(productAddListDTO);
         return ResponseEntity.status(HttpStatus.OK).body("Produto Removido da Lista");
     }
+
+    @PutMapping("/listName/product/quantity")
+    public ResponseEntity<Object> changeQuantity(Principal principal,
+                                                 @RequestParam("name") String listName,
+                                                 @RequestParam("product") String productName,
+                                                 @RequestParam("quantity") Integer quantity){
+
+        ProductAddListDTO productAddListDTO =
+                new ProductAddListDTO(productName,quantity,listName,principal.getName());
+
+        shoppingListProductServiceH2.changeProductQuantity(productAddListDTO);
+        return ResponseEntity.status(HttpStatus.OK).body("Quantidade Atualizada");
+    }
 }
