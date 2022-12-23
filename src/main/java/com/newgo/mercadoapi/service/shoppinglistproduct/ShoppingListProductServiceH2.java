@@ -73,6 +73,21 @@ public class ShoppingListProductServiceH2 {
         productRepository.setProductNewQuantity(newQuantity, product.getName());
     }
 
+    @Transactional
+    public void removeProductFromList(ProductAddListDTO productAddListDTO) {
+        Optional<User> userOptional = userRepository.findUserByUsername(productAddListDTO.getUser());
+        Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
+
+        isUserAndProductEmpty(userOptional, productOptional);
+
+        Optional<ShoppingList> shoppingList =
+                getListFromUser(productAddListDTO.getListName(), userOptional.get());
+
+        shoppingListProductRepository
+                .removeProductFromList(productOptional.get().getUuid(),
+                        shoppingList.get().getUuid());
+    }
+
     private void isUserAndProductEmpty(Optional<User> userOptional, Optional<Product> productOptional) {
         if (userOptional.isEmpty() || productOptional.isEmpty())
             throw new RuntimeException();
