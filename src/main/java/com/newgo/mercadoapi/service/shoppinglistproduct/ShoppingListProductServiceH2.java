@@ -1,9 +1,7 @@
 package com.newgo.mercadoapi.service.shoppinglistproduct;
 
 import com.newgo.mercadoapi.domain.dto.ProductAddListDTO;
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
 import com.newgo.mercadoapi.domain.dto.ProductListDTO;
-import com.newgo.mercadoapi.domain.mappers.ConverterDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.domain.model.ShoppingList;
 import com.newgo.mercadoapi.domain.model.ShoppingListProduct;
@@ -46,8 +44,8 @@ public class ShoppingListProductServiceH2 {
     }
 
     @Transactional
-    public void addProduct(String user, ProductAddListDTO productAddListDTO){
-        Optional<User> userOptional = userRepository.findUserByUsername(user);
+    public void addProduct(ProductAddListDTO productAddListDTO){
+        Optional<User> userOptional = userRepository.findUserByUsername(productAddListDTO.getUser());
         Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
 
         if (userOptional.isEmpty() || productOptional.isEmpty())
