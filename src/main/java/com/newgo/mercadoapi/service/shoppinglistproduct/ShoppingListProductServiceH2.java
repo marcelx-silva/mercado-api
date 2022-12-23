@@ -64,16 +64,6 @@ public class ShoppingListProductServiceH2 {
     }
 
     @Transactional
-    void setQuantity(Product product, Integer amountToBeAdded) {
-        int newQuantity = product.getQuantity() - amountToBeAdded;
-
-        if (newQuantity < 0)
-            throw new RuntimeException();
-
-        productRepository.setProductNewQuantity(newQuantity, product.getName());
-    }
-
-    @Transactional
     public void removeProductFromList(ProductAddListDTO productAddListDTO) {
         Optional<User> userOptional = userRepository.findUserByUsername(productAddListDTO.getUser());
         Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
@@ -86,6 +76,16 @@ public class ShoppingListProductServiceH2 {
         shoppingListProductRepository
                 .removeProductFromList(productOptional.get().getUuid(),
                         shoppingList.get().getUuid());
+    }
+
+    @Transactional
+    void setQuantity(Product product, Integer amountToBeAdded) {
+        int newQuantity = product.getQuantity() - amountToBeAdded;
+
+        if (newQuantity < 0)
+            throw new RuntimeException();
+
+        productRepository.setProductNewQuantity(newQuantity, product.getName());
     }
 
     private void isUserAndProductEmpty(Optional<User> userOptional, Optional<Product> productOptional) {
