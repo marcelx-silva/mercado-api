@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -29,7 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public void verifyUserPassword(LoginDTO loginDTO){
-        System.out.println("DESISTA3");
         UserDetails userDetails = loadUserByUsername(loginDTO.getUsername());
         boolean passwordCheck = bCryptPasswordEncoder.matches(loginDTO.getPassword(), userDetails.getPassword());
         if (!passwordCheck)

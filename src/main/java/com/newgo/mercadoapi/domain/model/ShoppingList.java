@@ -1,6 +1,7 @@
 package com.newgo.mercadoapi.domain.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "shoppingList")
+@NoArgsConstructor
 public class ShoppingList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,4 +23,10 @@ public class ShoppingList {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public ShoppingList(String name, String description, User user) {
+        this.name = name;
+        this.description = description;
+        this.user = user;
+    }
 }

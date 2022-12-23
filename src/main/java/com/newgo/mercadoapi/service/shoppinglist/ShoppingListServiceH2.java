@@ -37,8 +37,11 @@ public class ShoppingListServiceH2 implements ShoppingListService {
         if (userOptional.isEmpty())
             return;
 
-        ShoppingList shoppingList = modelMapper.map(shoppingListCreateDTO, ShoppingList.class);
-        shoppingList.setUser(userOptional.get());
+        ShoppingList shoppingList =
+                new ShoppingList(shoppingListCreateDTO.getName(),
+                        shoppingListCreateDTO.getDescription(),
+                        userOptional.get());
+
         shoppingListRepository.save(shoppingList);
     }
 

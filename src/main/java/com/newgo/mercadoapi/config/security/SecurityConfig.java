@@ -3,7 +3,10 @@ package com.newgo.mercadoapi.config.security;
 import com.newgo.mercadoapi.config.security.utils.JwtFilter;
 import com.newgo.mercadoapi.config.security.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -26,10 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().and().csrf().disable();
-        httpSecurity.authorizeRequests()
-                .antMatchers("/authorize/user/login","*/user/*").hasAnyAuthority("ROLE_CUSTOMER", "ROLE_ADMINISTRATOR")
-                .antMatchers("*/adm/*").hasAuthority("ROLE_ADMINISTRATOR")
-                .anyRequest()
+        httpSecurity.authorizeHttpRequests()
+                .antMatchers("/**")
                 .authenticated()
                 .and()
                 .sessionManagement()
@@ -50,5 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(this.bCryptPasswordEncoder);
     }
 
-
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 }
