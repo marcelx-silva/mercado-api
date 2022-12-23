@@ -52,11 +52,12 @@ public class ShoppingListProductServiceH2 {
 
         setQuantity(productOptional.get(), productAddListDTO.getAmount());
 
-        Optional<ShoppingList> shoppingList =
-                getListFromUser(productOptional.get().getName(),userOptional.get());
+        ShoppingList shoppingList =
+                getListFromUser(productAddListDTO.getListName(), userOptional.get());
+
 
         ShoppingListProduct listProduct =
-                new ShoppingListProduct(shoppingList.get(),
+                new ShoppingListProduct(shoppingList,
                         productOptional.get(),
                         productAddListDTO.getAmount());
 
@@ -70,12 +71,12 @@ public class ShoppingListProductServiceH2 {
 
         isUserAndProductEmpty(userOptional, productOptional);
 
-        Optional<ShoppingList> shoppingList =
+        ShoppingList shoppingList =
                 getListFromUser(productAddListDTO.getListName(), userOptional.get());
 
         shoppingListProductRepository
                 .removeProductFromList(productOptional.get().getUuid(),
-                        shoppingList.get().getUuid());
+                        shoppingList.getUuid());
     }
 
     @Transactional
@@ -84,12 +85,12 @@ public class ShoppingListProductServiceH2 {
         Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
         isUserAndProductEmpty(userOptional, productOptional);
 
-        Optional<ShoppingList> shoppingList =
+        ShoppingList shoppingList =
                 getListFromUser(productAddListDTO.getListName(), userOptional.get());
 
         shoppingListProductRepository
                 .changeProductQuantityFromList(productOptional.get().getUuid(),
-                        shoppingList.get().getUuid(),
+                        shoppingList.getUuid(),
                         productAddListDTO.getAmount());
 
 
@@ -111,8 +112,10 @@ public class ShoppingListProductServiceH2 {
             throw new RuntimeException();
     }
 
-    private Optional<ShoppingList> getListFromUser(String listName, User user) {
-        return Optional.ofNullable(shoppingListRepository
-                .findShoppingListByNameAndUser(listName, user));
+    private ShoppingList getListFromUser(String listName, User user) {
+        Optional<ShoppingList> shoppingList = Optional.ofNullable(shoppingListRepository.findShoppingListByNameAndUser(listName, user));
+        if (shoppingList.isEmpty())
+            throw new RuntimeException();
+        return shoppingList.get();
     }
 }
