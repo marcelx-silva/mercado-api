@@ -91,8 +91,7 @@ public class ProductController {
         if (product.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
 
-        BeanUtils.copyProperties(productDTO, product);
-        productService.save(product.get());
-        return ResponseEntity.ok().body(product);
+        productService.updateProduct(uuid,productDTO);
+        return ResponseEntity.ok().body(productService.findById(uuid));
     }
 }
