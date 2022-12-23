@@ -24,4 +24,16 @@ public interface ShoppingListProductRepository extends CrudRepository<ShoppingLi
             "pl.shoppingList.uuid =:list")
     void removeProductFromList(@Param("product") UUID productId, @Param("list") UUID productListId);
 
+    @Modifying
+    @Query(value = "UPDATE " +
+            "ShoppingListProduct pl " +
+            "SET " +
+            "pl.amountProductAdded =:quantity " +
+            "WHERE " +
+            "pl.products.uuid =:product AND " +
+            "pl.shoppingList.uuid =:list")
+    void changeProductQuantityFromList(@Param("product") UUID productId,
+                                       @Param("list") UUID productListId,
+                                       @Param("quantity") int quantity);
+
 }
