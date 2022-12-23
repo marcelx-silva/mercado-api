@@ -1,7 +1,9 @@
 package com.newgo.mercadoapi.service.shoppinglistproduct;
 
 import com.newgo.mercadoapi.domain.dto.ProductAddListDTO;
+import com.newgo.mercadoapi.domain.dto.ProductDTO;
 import com.newgo.mercadoapi.domain.dto.ProductListDTO;
+import com.newgo.mercadoapi.domain.mappers.ConverterDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.domain.model.ShoppingList;
 import com.newgo.mercadoapi.domain.model.ShoppingListProduct;
@@ -46,13 +48,13 @@ public class ShoppingListProductServiceH2 {
     @Transactional
     public void addProduct(String user, ProductAddListDTO productAddListDTO){
         Optional<User> userOptional = userRepository.findUserByUsername(user);
-        if (userOptional.isEmpty())
-            return;
-
         Optional<Product> productOptional = productRepository.findProductByName(productAddListDTO.getName());
-        if (productOptional.isEmpty())
+
+        if (userOptional.isEmpty() || productOptional.isEmpty())
             return;
 
+        changeProductQuantity(productOptional.get()
+                , productAddListDTO.getAmount());
 
         Optional<ShoppingList> shoppingList =
                 Optional.ofNullable(shoppingListRepository
@@ -64,4 +66,13 @@ public class ShoppingListProductServiceH2 {
         shoppingListProductRepository.save(listProduct);
     }
 
+    @Transactional
+    void changeProductQuantity(Product product, Integer amountToBeAdded){
+        int newQuantity = product.getQuantity() - amountToBeAdded;
+
+        if (newQuantity<0)
+            return;
+
+        productRepository.setProductNewQuantity(newQuantity,product.getName());
+    }
 }
