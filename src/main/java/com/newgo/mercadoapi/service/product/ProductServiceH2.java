@@ -79,4 +79,19 @@ public class ProductServiceH2 implements ProductService {
     public void updateProduct(UUID uuid, ProductDTO productDTO) {
         productRepository.updateProduct(uuid,productDTO);
     }
+
+    @Override
+    @Transactional
+    public void updateProductStatus(UUID uuid) {
+        Optional<Product> product = productRepository.findById(uuid);
+
+        if (product.isEmpty())
+            throw new RuntimeException();
+
+        if (product.get().getStatus()){
+            productRepository.setProductStatus(uuid, false);
+            return;
+        }
+        productRepository.setProductStatus(uuid, true);
+    }
 }
