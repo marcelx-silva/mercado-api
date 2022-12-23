@@ -19,11 +19,7 @@ public class ProductMapper implements ConverterDTO<Product, ProductDTO> {
         productDTO.setDescription(object.getDescription());
         productDTO.setStatus(object.getStatus());
         productDTO.setQuantity(object.getQuantity());
-
-        if (object.getImageProduct()!=null)
-            productDTO.setImageProductURL(object.getImageProduct().getUrl());
-
-        productDTO.setImageProductURL(null);
+        productDTO.setImageProductURL(object.getImageProduct()!=null ? object.getImageProduct().getUrl() : null);
 
         return productDTO;
     }
