@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,7 @@ public class ShoppingListController {
     ShoppingListProductServiceH2 shoppingListProductServiceH2;
 
     @PostMapping("/create")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> saveList(Principal principal,@RequestBody ShoppingListCreateDTO shoppingListCreateDTO) {
         shoppingListService.save(principal.getName(), shoppingListCreateDTO);
         return ResponseEntity
@@ -35,6 +37,7 @@ public class ShoppingListController {
 
 
     @GetMapping("/listName")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getUniqueShoppingList(Principal principal, @RequestParam("name") String listName) {
         ShoppingListRequestDTO shoppingListRequestDTO =
                 modelMapper
@@ -46,6 +49,7 @@ public class ShoppingListController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getAllShoppingList(Principal principal) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -53,6 +57,7 @@ public class ShoppingListController {
     }
 
     @DeleteMapping("/deleteByName")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> deleteShoppingList(Principal principal, @RequestParam("name") String listName) {
         shoppingListService.deleteByName(principal.getName(), listName);
         return ResponseEntity
@@ -60,6 +65,7 @@ public class ShoppingListController {
                 .body("List Deleted");
     }
     @PostMapping("/listName/product")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> addProduct(Principal principal,
                                              @RequestParam("name") String listName,
                                              @RequestBody ProductAddListDTO productAddListDTO){
@@ -71,6 +77,7 @@ public class ShoppingListController {
     }
 
     @DeleteMapping ("/listName/product/remove")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> removeProduct(Principal principal,
                                                 @RequestParam("name") String listName,
                                                 @RequestParam("product") String productName){
@@ -84,6 +91,7 @@ public class ShoppingListController {
     }
 
     @PutMapping("/listName/product/quantity")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> changeQuantity(Principal principal,
                                                  @RequestParam("name") String listName,
                                                  @RequestParam("product") String productName,

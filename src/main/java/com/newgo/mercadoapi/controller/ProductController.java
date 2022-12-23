@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ public class ProductController {
 
     @PostMapping("/adm/save")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> save(@RequestBody ProductDTO productDTO) {
         productService.save(productDTO);
         return ResponseEntity.ok().body(productDTO);
@@ -41,6 +43,7 @@ public class ProductController {
 
     @PostMapping("/adm/save/product/image")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> saveWithImage(@RequestPart("img") MultipartFile multipartFile,
                                         @RequestParam String descImg,
                                         @RequestParam Boolean statusProd,
@@ -69,6 +72,7 @@ public class ProductController {
 
     @GetMapping("/adm/all")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> getAllProdutos() {
         return ResponseEntity
                 .ok()
@@ -77,6 +81,7 @@ public class ProductController {
 
     @GetMapping("/user/all")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getOnlyActivatedProdutos() {
         return ResponseEntity
                 .ok()
@@ -85,6 +90,7 @@ public class ProductController {
 
     @GetMapping("/adm/id/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> getOneById(@PathVariable("id") UUID uuid) {
         Optional<ProductDTO> productDTO = productService.findById(uuid);
         if (productDTO.isEmpty())
@@ -95,6 +101,7 @@ public class ProductController {
 
     @GetMapping("/findByName")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getOneByName(@RequestParam(value = "name") String name) {
         Optional<ProductDTO> productDTO = productService.findByName(name);
         if (productDTO.isEmpty())
@@ -105,6 +112,7 @@ public class ProductController {
 
     @DeleteMapping("/adm/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> deleteProdutoById(@PathVariable("id") UUID uuid) {
         Optional<ProductDTO> productDTO = productService.findById(uuid);
         if (productDTO.isEmpty())
@@ -116,6 +124,7 @@ public class ProductController {
 
     @DeleteMapping("/adm/delete")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> deleteProdutoById(@RequestParam(value = "name") String name) {
         Optional<ProductDTO> productDTO = productService.findByName(name);
         if (productDTO.isEmpty())
@@ -127,6 +136,7 @@ public class ProductController {
 
     @PutMapping("/adm/update/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> updateProdutoById(@PathVariable("id") UUID uuid, @RequestBody ProductDTO productDTO) {
         Optional<ProductDTO> product = productService.findById(uuid);
         if (product.isEmpty())
@@ -138,6 +148,7 @@ public class ProductController {
 
     @PutMapping("/adm/update/{id}/status")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> updateProductStatus(@PathVariable("id") UUID uuid) {
         Optional<ProductDTO> product = productService.findById(uuid);
         if (product.isEmpty())
