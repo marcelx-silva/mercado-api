@@ -27,4 +27,8 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
                     "p.status = :#{#productDTO.status} " +
                     "WHERE p.uuid =:id")
     void updateProduct(@Param("id") UUID uuid, @Param("productDTO") ProductDTO productDTO);
+
+    @Modifying
+    @Query(value = "UPDATE Product p SET p.quantity =:newQuantity WHERE p.name =:name")
+    void setProductNewQuantity(int newQuantity, String name);
 }
