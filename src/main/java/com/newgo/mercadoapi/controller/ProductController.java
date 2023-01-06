@@ -41,35 +41,6 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @PostMapping("/adm/save/product/image")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> saveWithImage(@RequestPart("img") MultipartFile multipartFile,
-                                        @RequestParam String descImg,
-                                        @RequestParam Boolean statusProd,
-                                        @RequestParam String nameProd,
-                                        @RequestParam String descProd,
-                                        @RequestParam int quantProd) {
-
-        storage.saveImage(multipartFile);
-        ImageProductDTO imageProductDTO =
-                new ImageProductDTO(multipartFile.getOriginalFilename().toLowerCase(),
-                        storage.getImagePath(), descImg);
-        imageProductService.save(imageProductDTO);
-
-
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setName(nameProd);
-        productDTO.setDescription(descProd);
-        productDTO.setStatus(statusProd);
-        productDTO.setQuantity(quantProd);
-        productDTO.setImageProductURL(storage.getImagePath());
-
-
-        productService.save(productDTO);
-        return ResponseEntity.ok().body(productService.findByName(nameProd));
-    }
-
     @GetMapping("/adm/all")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
