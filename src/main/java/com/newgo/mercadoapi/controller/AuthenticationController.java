@@ -21,9 +21,8 @@ public class AuthenticationController {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/user/login")
+    @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody LoginDTO loginDTO) {
-        System.out.println(loginDTO.getUsername());
         userDetailsServiceImpl.verifyUserPassword(loginDTO);
         String token = jwtTokenUtil.generateAccessToken(loginDTO.getUsername());
         return ResponseEntity.status(HttpStatus.OK).body(new AuthResponseDTO(token));
