@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/list/product")
+@RequestMapping("/shop-lists")
 public class ShoppingListController {
     @Autowired
     ShoppingListService shoppingListService;
@@ -25,7 +25,7 @@ public class ShoppingListController {
     @Autowired
     ShoppingListProductServiceH2 shoppingListProductServiceH2;
 
-    @PostMapping("/create")
+    @PostMapping("/managed-lists")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> saveList(Principal principal,@RequestBody ShoppingListCreateDTO shoppingListCreateDTO) {
         shoppingListService.save(principal.getName(), shoppingListCreateDTO);
@@ -36,7 +36,7 @@ public class ShoppingListController {
     }
 
 
-    @GetMapping("/listName")
+    @GetMapping("/managed-lists/list")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getUniqueShoppingList(Principal principal, @RequestParam("name") String listName) {
         ShoppingListRequestDTO shoppingListRequestDTO =
@@ -48,7 +48,7 @@ public class ShoppingListController {
                 .body(shoppingListRequestDTO);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/managed-lists/all")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getAllShoppingList(Principal principal) {
         return ResponseEntity
@@ -56,7 +56,7 @@ public class ShoppingListController {
                 .body(shoppingListService.findAllByUser(principal.getName()));
     }
 
-    @DeleteMapping("/deleteByName")
+    @DeleteMapping("/managed-list/list/{name}")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> deleteShoppingList(Principal principal, @RequestParam("name") String listName) {
         shoppingListService.deleteByName(principal.getName(), listName);
@@ -64,7 +64,7 @@ public class ShoppingListController {
                 .status(HttpStatus.OK)
                 .body("List Deleted");
     }
-    @PostMapping("/listName/product")
+    @PostMapping("/managed-lists/list/product")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> addProduct(Principal principal,
                                              @RequestParam("name") String listName,
@@ -76,7 +76,7 @@ public class ShoppingListController {
         return ResponseEntity.status(HttpStatus.OK).body("Produto Adicionado");
     }
 
-    @DeleteMapping ("/listName/product/remove")
+    @DeleteMapping ("/managed-lists/list/product")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> removeProduct(Principal principal,
                                                 @RequestParam("name") String listName,
@@ -90,7 +90,7 @@ public class ShoppingListController {
         return ResponseEntity.status(HttpStatus.OK).body("Produto Removido da Lista");
     }
 
-    @PutMapping("/listName/product/quantity")
+    @PutMapping("/managed-lists/list/product/quantity")
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> changeQuantity(Principal principal,
                                                  @RequestParam("name") String listName,
