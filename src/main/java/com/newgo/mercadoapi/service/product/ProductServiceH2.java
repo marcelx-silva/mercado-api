@@ -1,7 +1,7 @@
 package com.newgo.mercadoapi.service.product;
 
 import com.newgo.mercadoapi.domain.dto.ProductDTO;
-import com.newgo.mercadoapi.domain.mappers.ConverterDTO;
+import com.newgo.mercadoapi.domain.mappers.ObjectDTOMapper;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
@@ -22,7 +22,7 @@ public class ProductServiceH2 implements ProductService {
     @Autowired
     ModelMapper modelMapper;
     @Autowired
-    ConverterDTO<Product,ProductDTO> converterDTO;
+    ObjectDTOMapper<Product,ProductDTO> converterDTO;
     @Autowired
     ImageProductService imageProductService;
 
