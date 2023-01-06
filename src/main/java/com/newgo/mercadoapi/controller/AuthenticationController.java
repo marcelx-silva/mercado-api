@@ -1,8 +1,8 @@
 package com.newgo.mercadoapi.controller;
 
 import com.newgo.mercadoapi.config.security.utils.JwtTokenUtil;
-import com.newgo.mercadoapi.domain.dto.AuthResponseDTO;
-import com.newgo.mercadoapi.domain.dto.LoginDTO;
+import com.newgo.mercadoapi.domain.dto.auth.AuthResponseDTO;
+import com.newgo.mercadoapi.domain.dto.auth.LoginDTO;
 import com.newgo.mercadoapi.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

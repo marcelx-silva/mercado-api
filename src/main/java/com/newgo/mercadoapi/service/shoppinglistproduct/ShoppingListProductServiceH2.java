@@ -1,7 +1,7 @@
 package com.newgo.mercadoapi.service.shoppinglistproduct;
 
-import com.newgo.mercadoapi.domain.dto.ProductAddListDTO;
-import com.newgo.mercadoapi.domain.dto.ProductListDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductAddListDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductListDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.domain.model.ShoppingList;
 import com.newgo.mercadoapi.domain.model.ShoppingListProduct;

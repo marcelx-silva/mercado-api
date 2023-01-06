@@ -1,6 +1,6 @@
 package com.newgo.mercadoapi.repository;
 
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

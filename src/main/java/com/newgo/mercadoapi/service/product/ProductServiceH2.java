@@ -1,6 +1,6 @@
 package com.newgo.mercadoapi.service.product;
 
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.mappers.ObjectDTOMapper;
 import com.newgo.mercadoapi.domain.model.Product;
 import com.newgo.mercadoapi.repository.ProductRepository;

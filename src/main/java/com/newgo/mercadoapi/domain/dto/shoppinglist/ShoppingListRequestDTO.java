@@ -1,5 +1,6 @@
-package com.newgo.mercadoapi.domain.dto;
+package com.newgo.mercadoapi.domain.dto.shoppinglist;
 
+import com.newgo.mercadoapi.domain.dto.product.ProductListDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

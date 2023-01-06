@@ -1,10 +1,8 @@
 package com.newgo.mercadoapi.domain.mappers;
 
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.model.Product;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class ProductMapper implements ObjectDTOMapper<Product, ProductDTO> {

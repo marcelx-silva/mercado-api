@@ -1,6 +1,6 @@
 package com.newgo.mercadoapi.controller;
 
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import com.newgo.mercadoapi.service.imageproduct.Storage;
 import com.newgo.mercadoapi.service.product.ProductService;

@@ -1,6 +1,6 @@
 package com.newgo.mercadoapi.service.user;
 
-import com.newgo.mercadoapi.domain.dto.LoginDTO;
+import com.newgo.mercadoapi.domain.dto.auth.LoginDTO;
 import com.newgo.mercadoapi.domain.model.User;
 import com.newgo.mercadoapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

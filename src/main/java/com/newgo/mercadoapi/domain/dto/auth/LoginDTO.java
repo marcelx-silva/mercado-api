@@ -1,4 +1,4 @@
-package com.newgo.mercadoapi.domain.dto;
+package com.newgo.mercadoapi.domain.dto.auth;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,9 +1,9 @@
 package com.newgo.mercadoapi.controller;
 
 import com.newgo.mercadoapi.service.shoppinglistproduct.ShoppingListProductServiceH2;
-import com.newgo.mercadoapi.domain.dto.ProductAddListDTO;
-import com.newgo.mercadoapi.domain.dto.ShoppingListCreateDTO;
-import com.newgo.mercadoapi.domain.dto.ShoppingListRequestDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductAddListDTO;
+import com.newgo.mercadoapi.domain.dto.shoppinglist.ShoppingListCreateDTO;
+import com.newgo.mercadoapi.domain.dto.shoppinglist.ShoppingListRequestDTO;
 import com.newgo.mercadoapi.service.shoppinglist.ShoppingListService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
