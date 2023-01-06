@@ -57,7 +57,7 @@ public class ShoppingListServiceH2 implements ShoppingListService {
                         .add(modelMapper.map(shoppingList, ShoppingListRequestDTO.class)));
         shoppingListRequestDTOs
                 .stream()
-                .forEach(each -> each.setProductDTOSet(listProduct.findAllProductsFromShoppingList(each.getName())));
+                .forEach(each -> each.setProducts(listProduct.findAllProductsFromShoppingList(each.getName())));
 
         return shoppingListRequestDTOs;
     }
@@ -72,7 +72,7 @@ public class ShoppingListServiceH2 implements ShoppingListService {
                 modelMapper.map(shoppingListRepository.findShoppingListByNameAndUser(listName, userOptional.get()), ShoppingListRequestDTO.class);
 
         shoppingListRequestDTO
-                .setProductDTOSet(listProduct.findAllProductsFromShoppingList(listName));
+                .setProducts(listProduct.findAllProductsFromShoppingList(listName));
         return shoppingListRequestDTO;
     }
 
