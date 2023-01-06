@@ -53,7 +53,7 @@ public class ShoppingListProductServiceH2 {
         setQuantity(productOptional.get(), productAddListDTO.getAmount());
 
         Optional<ShoppingList> shoppingList =
-                getListFromUser(productOptional.get().getName(),userOptional.get());
+                getListFromUser(productAddListDTO.getListName(),userOptional.get());
 
         ShoppingListProduct listProduct =
                 new ShoppingListProduct(shoppingList.get(),
