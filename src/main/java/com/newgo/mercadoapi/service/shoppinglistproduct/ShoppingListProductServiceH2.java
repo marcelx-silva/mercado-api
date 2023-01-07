@@ -57,6 +57,9 @@ public class ShoppingListProductServiceH2 {
         ShoppingList shoppingList =
                 getListFromUser(productAddListDTO.getListName(), userOptional.get());
 
+        shoppingList.setListTotalPrice(shoppingList.getListTotalPrice() + totalPrice);
+        shoppingListRepository.save(shoppingList);
+
         ShoppingListProduct listProduct =
                 new ShoppingListProduct(shoppingList,
                         productOptional.get(),

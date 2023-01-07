@@ -23,6 +23,8 @@ public class ShoppingList {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @Column(name = "total_price",columnDefinition="Decimal(10,2) default '0.0'", updatable = true)
+    private Double listTotalPrice = 0.0;
 
     public ShoppingList(String name, String description, User user) {
         this.name = name;
