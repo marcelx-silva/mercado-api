@@ -18,6 +18,7 @@ public class ProductMapper implements ObjectDTOMapper<Product, ProductDTO> {
         productDTO.setDescription(object.getDescription());
         productDTO.setStatus(object.getStatus());
         productDTO.setQuantity(object.getQuantity());
+        productDTO.setPrice(object.getPrice());
         productDTO.setImageProductURL(object.getImageProduct()!=null ? object.getImageProduct().getUrl() : null);
 
         return productDTO;
