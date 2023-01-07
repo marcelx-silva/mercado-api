@@ -1,8 +1,8 @@
 package com.newgo.mercadoapi.service.shoppinglist;
 
 
-import com.newgo.mercadoapi.domain.dto.ShoppingListCreateDTO;
-import com.newgo.mercadoapi.domain.dto.ShoppingListRequestDTO;
+import com.newgo.mercadoapi.domain.dto.shoppinglist.ShoppingListCreateDTO;
+import com.newgo.mercadoapi.domain.dto.shoppinglist.ShoppingListRequestDTO;
 import com.newgo.mercadoapi.domain.model.ShoppingList;
 import com.newgo.mercadoapi.domain.model.User;
 import com.newgo.mercadoapi.repository.ShoppingListRepository;
@@ -57,7 +57,7 @@ public class ShoppingListServiceH2 implements ShoppingListService {
                         .add(modelMapper.map(shoppingList, ShoppingListRequestDTO.class)));
         shoppingListRequestDTOs
                 .stream()
-                .forEach(each -> each.setProductDTOSet(listProduct.findAllProductsFromShoppingList(each.getName())));
+                .forEach(each -> each.setProducts(listProduct.findAllProductsFromShoppingList(each.getName())));
 
         return shoppingListRequestDTOs;
     }
@@ -72,7 +72,7 @@ public class ShoppingListServiceH2 implements ShoppingListService {
                 modelMapper.map(shoppingListRepository.findShoppingListByNameAndUser(listName, userOptional.get()), ShoppingListRequestDTO.class);
 
         shoppingListRequestDTO
-                .setProductDTOSet(listProduct.findAllProductsFromShoppingList(listName));
+                .setProducts(listProduct.findAllProductsFromShoppingList(listName));
         return shoppingListRequestDTO;
     }
 

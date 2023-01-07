@@ -1,7 +1,7 @@
 package com.newgo.mercadoapi.service.shoppinglist;
 
-import com.newgo.mercadoapi.domain.dto.ShoppingListCreateDTO;
-import com.newgo.mercadoapi.domain.dto.ShoppingListRequestDTO;
+import com.newgo.mercadoapi.domain.dto.shoppinglist.ShoppingListCreateDTO;
+import com.newgo.mercadoapi.domain.dto.shoppinglist.ShoppingListRequestDTO;
 
 import java.util.Set;
 

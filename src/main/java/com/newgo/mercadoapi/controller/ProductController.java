@@ -1,22 +1,16 @@
 package com.newgo.mercadoapi.controller;
 
-import com.newgo.mercadoapi.domain.dto.ImageProductDTO;
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
-import com.newgo.mercadoapi.domain.model.ImageProduct;
-import com.newgo.mercadoapi.domain.model.Product;
+import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import com.newgo.mercadoapi.service.imageproduct.Storage;
 import com.newgo.mercadoapi.service.product.ProductService;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +27,7 @@ public class ProductController {
     ImageProductService imageProductService;
 
 
-    @PostMapping("/adm/save")
+    @PostMapping("/managed-products")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> save(@RequestBody ProductDTO productDTO) {
@@ -41,36 +35,7 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @PostMapping("/adm/save/product/image")
-    @ResponseStatus(HttpStatus.OK)
-    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> saveWithImage(@RequestPart("img") MultipartFile multipartFile,
-                                        @RequestParam String descImg,
-                                        @RequestParam Boolean statusProd,
-                                        @RequestParam String nameProd,
-                                        @RequestParam String descProd,
-                                        @RequestParam int quantProd) {
-
-        storage.saveImage(multipartFile);
-        ImageProductDTO imageProductDTO =
-                new ImageProductDTO(multipartFile.getOriginalFilename().toLowerCase(),
-                        storage.getImagePath(), descImg);
-        imageProductService.save(imageProductDTO);
-
-
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setName(nameProd);
-        productDTO.setDescription(descProd);
-        productDTO.setStatus(statusProd);
-        productDTO.setQuantity(quantProd);
-        productDTO.setImageProductURL(storage.getImagePath());
-
-
-        productService.save(productDTO);
-        return ResponseEntity.ok().body(productService.findByName(nameProd));
-    }
-
-    @GetMapping("/adm/all")
+    @GetMapping("/managed-products/products/all")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> getAllProdutos() {
@@ -79,7 +44,7 @@ public class ProductController {
                 .body(productService.findAll());
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/products/all")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getOnlyActivatedProdutos() {
@@ -88,10 +53,10 @@ public class ProductController {
                 .body(productService.findAllByAtivadoIsTrue());
     }
 
-    @GetMapping("/adm/id/{id}")
+    @GetMapping("/managed-products/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> getOneById(@PathVariable("id") UUID uuid) {
+    public ResponseEntity<Object> getOneById(@PathVariable("productId") UUID uuid) {
         Optional<ProductDTO> productDTO = productService.findById(uuid);
         if (productDTO.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
@@ -99,7 +64,7 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @GetMapping("/findByName")
+    @GetMapping({"/product"})
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> getOneByName(@RequestParam(value = "name") String name) {
@@ -110,10 +75,10 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @DeleteMapping("/adm/delete/{id}")
+    @DeleteMapping("/managed-products/product/{productId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> deleteProdutoById(@PathVariable("id") UUID uuid) {
+    public ResponseEntity<Object> deleteProdutoById(@PathVariable("productId") UUID uuid) {
         Optional<ProductDTO> productDTO = productService.findById(uuid);
         if (productDTO.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
@@ -122,10 +87,10 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @DeleteMapping("/adm/delete")
+    @DeleteMapping("/managed-products/product")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> deleteProdutoById(@RequestParam(value = "name") String name) {
+    public ResponseEntity<Object> deleteProdutoByName(@RequestParam(value = "name") String name) {
         Optional<ProductDTO> productDTO = productService.findByName(name);
         if (productDTO.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
@@ -134,10 +99,10 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
-    @PutMapping("/adm/update/{id}")
+    @PutMapping("/managed-products/product/{productId}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> updateProdutoById(@PathVariable("id") UUID uuid, @RequestBody ProductDTO productDTO) {
+    public ResponseEntity<Object> updateProdutoById(@PathVariable("productId") UUID uuid, @RequestBody ProductDTO productDTO) {
         Optional<ProductDTO> product = productService.findById(uuid);
         if (product.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
@@ -146,10 +111,10 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.findById(uuid));
     }
 
-    @PutMapping("/adm/update/{id}/status")
+    @PutMapping("/managed-products/product/{productId}/status")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> updateProductStatus(@PathVariable("id") UUID uuid) {
+    public ResponseEntity<Object> updateProductStatus(@PathVariable("productId") UUID uuid) {
         Optional<ProductDTO> product = productService.findById(uuid);
         if (product.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");

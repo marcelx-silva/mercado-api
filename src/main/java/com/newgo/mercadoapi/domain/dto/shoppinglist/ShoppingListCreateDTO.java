@@ -1,18 +1,16 @@
-package com.newgo.mercadoapi.domain.dto;
+package com.newgo.mercadoapi.domain.dto.shoppinglist;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ShoppingListRequestDTO {
+public class ShoppingListCreateDTO {
     private String name;
     private String description;
-    private Set<ProductListDTO> productDTOSet;
 }
+

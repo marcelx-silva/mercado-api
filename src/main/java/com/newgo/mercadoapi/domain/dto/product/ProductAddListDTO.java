@@ -1,4 +1,4 @@
-package com.newgo.mercadoapi.domain.dto;
+package com.newgo.mercadoapi.domain.dto.product;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.newgo.mercadoapi.service.product;
 
-import com.newgo.mercadoapi.domain.dto.ProductDTO;
+import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 
 import java.util.Optional;
 import java.util.Set;
