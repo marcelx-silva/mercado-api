@@ -25,15 +25,21 @@ public class Product {
     private Boolean status;
     @Column(name = "quantity",nullable = false)
     private Integer quantity;
+    @Column(name = "price",nullable = false)
+    private Double price;
     @OneToOne
     @JoinColumn(name = "image_id",referencedColumnName = "uuid")
     private ImageProduct imageProduct;
 
-    public Product(String name, String description, Boolean status, Integer quantity, ImageProduct imageProduct) {
+    public Product(String name, String description, Boolean status, Integer quantity,
+                   Double price,
+                   ImageProduct imageProduct) {
+
         this.name = name;
         this.description = description;
         this.status = status;
         this.quantity = quantity;
+        this.price = price;
         this.imageProduct = imageProduct;
     }
 
