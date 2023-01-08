@@ -23,4 +23,9 @@ public class ProductMapper implements ObjectDTOMapper<Product, ProductDTO> {
 
         return productDTO;
     }
+
+    @Override
+    public Product toObject(ProductDTO productDTO) {
+        return null;
+    }
 }
