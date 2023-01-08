@@ -35,4 +35,6 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
     @Modifying
     @Query(value = "UPDATE Product p SET p.status =:newStatus WHERE p.uuid =:id")
     void setProductStatus(@Param("id") UUID uuid, @Param("newStatus") boolean newStatus);
+
+    Set<Product> findByPriceBetween(Double min, Double max);
 }
