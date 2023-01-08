@@ -13,4 +13,5 @@ public class ProductListDTO {
     private String name;
     private String description;
     private Integer quantity;
+    private Double price;
 }

@@ -18,4 +18,5 @@ public class ProductDTO {
     private String imageProductURL;
     private Integer quantity;
     private Boolean status;
+    private Double price;
 }

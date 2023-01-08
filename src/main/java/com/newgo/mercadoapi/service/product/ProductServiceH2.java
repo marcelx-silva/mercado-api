@@ -94,4 +94,15 @@ public class ProductServiceH2 implements ProductService {
         }
         productRepository.setProductStatus(uuid, true);
     }
+
+    @Override
+    public Set<ProductDTO> findProductsBetween(Double min, Double max) {
+      Set<ProductDTO> products = new HashSet<>();
+      productRepository.findByPriceBetween(min, max)
+              .stream()
+              .filter(Product::getStatus)
+              .forEach(product -> products.add(converterDTO.toDTO(product)));
+
+      return products;
+    }
 }

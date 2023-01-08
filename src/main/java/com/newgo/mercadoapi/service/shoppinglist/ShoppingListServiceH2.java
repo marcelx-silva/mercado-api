@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.TypedQuery;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ShoppingListServiceH2 implements ShoppingListService {
@@ -85,4 +87,14 @@ public class ShoppingListServiceH2 implements ShoppingListService {
 
         shoppingListRepository.delete(shoppingListRepository.findShoppingListByNameAndUser(listName,userOptional.get()));
     }
+
+    @Override
+    public Double queryListPrice(String user, UUID listId) {
+        Optional<User> userOptional = userRepository.findUserByUsername(user);
+        if (userOptional.isEmpty())
+            throw new RuntimeException();
+
+        return shoppingListRepository.queryListPrice(user,listId);
+    }
+
 }

@@ -24,10 +24,13 @@ public class ShoppingListProduct {
     private Product products;
     @Column(name = "quantity_product",nullable = false)
     private Integer amountProductAdded;
+    @Column(name = "product_price",nullable = false)
+    private Double productPrice;
 
-    public ShoppingListProduct(ShoppingList shoppingList, Product products, Integer amountProductAdded) {
+    public ShoppingListProduct(ShoppingList shoppingList, Product products, Integer amountProductAdded,Double productPrice) {
         this.shoppingList = shoppingList;
         this.products = products;
         this.amountProductAdded = amountProductAdded;
+        this.productPrice = productPrice;
     }
 }

@@ -87,6 +87,15 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
+    @GetMapping("/products/price")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
+    public ResponseEntity<Object> findProductsPriceBetween(
+            @RequestParam(value = "min" , defaultValue = "0.0") Double min,
+            @RequestParam(value = "max", defaultValue = "999999.9") Double max){
+        return ResponseEntity.ok().body(productService.findProductsBetween(min, max));
+    }
+
     @DeleteMapping("/managed-products/product")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")

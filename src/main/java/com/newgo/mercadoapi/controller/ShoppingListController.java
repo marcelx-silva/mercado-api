@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/shop-lists")
@@ -54,6 +55,15 @@ public class ShoppingListController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(shoppingListService.findAllByUser(principal.getName()));
+    }
+
+    @GetMapping("/managed-lists/list/{id}/price")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
+    public ResponseEntity<Object> getListTotalPrice(Principal principal, @PathVariable("id")UUID listId){
+        Double listPrice = shoppingListService.queryListPrice(principal.getName(), listId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("List Price: "+listPrice);
     }
 
     @DeleteMapping("/managed-list/list/{name}")

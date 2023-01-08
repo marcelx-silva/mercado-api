@@ -39,7 +39,7 @@ public class ShoppingListProductServiceH2 {
                 .forEach(product -> productDTOs
                         .add(new ProductListDTO(product.getProducts().getName(),
                                 product.getProducts().getDescription(),
-                                product.getAmountProductAdded())));
+                                product.getAmountProductAdded(), product.getProductPrice())));
         return productDTOs;
     }
 
@@ -52,13 +52,19 @@ public class ShoppingListProductServiceH2 {
 
         setQuantity(productOptional.get(), productAddListDTO.getAmount());
 
+        Double totalPrice = getProductTotalPriceInList(productOptional.get(), productAddListDTO.getAmount());
+
         ShoppingList shoppingList =
-                getListFromUser(productAddListDTO.getListName(),userOptional.get());
+                getListFromUser(productAddListDTO.getListName(), userOptional.get());
+
+        shoppingList.setListTotalPrice(shoppingList.getListTotalPrice() + totalPrice);
+        shoppingListRepository.save(shoppingList);
 
         ShoppingListProduct listProduct =
                 new ShoppingListProduct(shoppingList,
                         productOptional.get(),
-                        productAddListDTO.getAmount());
+                        productAddListDTO.getAmount(),
+                        totalPrice);
 
         shoppingListProductRepository.save(listProduct);
     }
@@ -103,6 +109,9 @@ public class ShoppingListProductServiceH2 {
         if (newQuantity < 0)
             throw new RuntimeException();
 
+        if (amountToBeAdded == 0)
+            throw new RuntimeException();
+
         productRepository.setProductNewQuantity(newQuantity, product.getName());
     }
 
@@ -116,5 +125,9 @@ public class ShoppingListProductServiceH2 {
         if (shoppingList.isEmpty())
             throw new RuntimeException();
         return shoppingList.get();
+    }
+
+    private Double getProductTotalPriceInList(Product product, Integer amount) {
+        return product.getPrice() * amount;
     }
 }
