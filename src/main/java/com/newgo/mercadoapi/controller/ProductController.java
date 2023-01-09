@@ -87,6 +87,14 @@ public class ProductController {
         return ResponseEntity.ok().body(productDTO);
     }
 
+    @GetMapping("/products")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
+    public ResponseEntity<Object> findProductsByKeyWord(@RequestParam(value = "keyword") String keyWord){
+        System.out.println(keyWord);
+        return ResponseEntity.ok().body(productService.searchByKeyWord(keyWord));
+    }
+
     @GetMapping("/products/price")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
