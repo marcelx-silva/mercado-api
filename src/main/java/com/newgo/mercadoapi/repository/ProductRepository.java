@@ -2,7 +2,6 @@ package com.newgo.mercadoapi.repository;
 
 import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.model.Product;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends CrudRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
+public interface ProductRepository extends CrudRepository<Product, UUID>{
     Optional<Product> findProductByName(String name);
     void deleteProductByName(String name);
     Set<Product> findAllByStatusIsTrue();
