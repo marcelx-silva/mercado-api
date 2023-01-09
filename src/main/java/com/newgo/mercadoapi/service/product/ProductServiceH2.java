@@ -33,13 +33,14 @@ public class ProductServiceH2 implements ProductService {
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
-        Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
-        if (category.isEmpty())
-            return;
-
-
         Product product = modelMapper.map(productDTO, Product.class);
-        product.setCategory(category.get());
+        Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
+        if (category.isPresent()){
+            product.setCategory(category.get());
+        }else {
+            product.setCategory(null);
+        }
+
         product.setImageProduct(imageProductService.findByURL(productDTO.getImageProductURL()));
         productRepository.save(product);
     }
@@ -123,4 +124,19 @@ public class ProductServiceH2 implements ProductService {
         productRepository.searchByKeyWord(keyWord).forEach(product -> products.add(converterDTO.toDTO(product)));
         return products;
     }
+
+    @Override
+    public void updateProductCategory(String category, UUID productId) {
+        Optional<Category> optionalCategory = categoryRepository.findByName(category);
+        if (optionalCategory.isEmpty())
+            throw new RuntimeException();
+
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new RuntimeException();
+
+        optionalProduct.get().setCategory(optionalCategory.get());
+        productRepository.save(optionalProduct.get());
+    }
+
 }
