@@ -38,4 +38,6 @@ public interface ProductRepository extends CrudRepository<Product, UUID>, JpaSpe
     void setProductStatus(@Param("id") UUID uuid, @Param("newStatus") boolean newStatus);
 
     Set<Product> findByPriceBetween(Double min, Double max);
+    @Query(value = "SELECT p, c.name FROM Product p  JOIN Category  c ON(p.category = c.uuid) WHERE CONCAT(p.name,'',p.description,p.category.name) LIKE %:word%")
+    Set<Product> searchByKeyWord(@Param("word") String keyword);
 }
