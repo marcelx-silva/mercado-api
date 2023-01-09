@@ -2,7 +2,9 @@ package com.newgo.mercadoapi.service.product;
 
 import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.mappers.ObjectDTOMapper;
+import com.newgo.mercadoapi.domain.model.Category;
 import com.newgo.mercadoapi.domain.model.Product;
+import com.newgo.mercadoapi.repository.CategoryRepository;
 import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import org.modelmapper.ModelMapper;
@@ -25,11 +27,19 @@ public class ProductServiceH2 implements ProductService {
     ObjectDTOMapper<Product,ProductDTO> converterDTO;
     @Autowired
     ImageProductService imageProductService;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
+        Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
+        if (category.isEmpty())
+            return;
+
+
         Product product = modelMapper.map(productDTO, Product.class);
+        product.setCategory(category.get());
         product.setImageProduct(imageProductService.findByURL(productDTO.getImageProductURL()));
         productRepository.save(product);
     }
