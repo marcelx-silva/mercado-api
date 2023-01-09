@@ -115,4 +115,12 @@ public class ProductServiceH2 implements ProductService {
 
       return products;
     }
+
+    @Override
+    public Set<ProductDTO> searchByKeyWord(String keyWord) {
+        Set<ProductDTO> products = new HashSet<>();
+        System.out.println("Esta vazio: "+(productRepository.searchByKeyWord(keyWord).isEmpty() ? "sim" : "nao"));
+        productRepository.searchByKeyWord(keyWord).forEach(product -> products.add(converterDTO.toDTO(product)));
+        return products;
+    }
 }
