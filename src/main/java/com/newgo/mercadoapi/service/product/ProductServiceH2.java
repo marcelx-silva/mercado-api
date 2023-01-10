@@ -7,6 +7,8 @@ import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +16,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceH2 implements ProductService {
@@ -35,10 +38,8 @@ public class ProductServiceH2 implements ProductService {
     }
 
     @Override
-    public Set<ProductDTO> findAll() {
-        Set<ProductDTO> productDTOSet = new HashSet<>();
-        productRepository.findAll().forEach(product -> productDTOSet.add(converterDTO.toDTO(product)));
-        return productDTOSet;
+    public Page<ProductDTO> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable).map(converterDTO::toDTO);
     }
 
     @Override
@@ -66,12 +67,9 @@ public class ProductServiceH2 implements ProductService {
     }
 
     @Override
-    public Set<ProductDTO> findAllByAtivadoIsTrue() {
-        Set<ProductDTO> productDTOSet = new HashSet<>();
-        productRepository.findAllByStatusIsTrue().
-                forEach(product -> productDTOSet.
-                        add(converterDTO.toDTO(product)));
-        return productDTOSet;
+    public Page<ProductDTO> findAllByAtivadoIsTrue(Pageable pageable) {
+        return productRepository.findAllByStatusIsTrue(pageable)
+                .map(converterDTO::toDTO);
     }
 
     @Override
@@ -96,13 +94,9 @@ public class ProductServiceH2 implements ProductService {
     }
 
     @Override
-    public Set<ProductDTO> findProductsBetween(Double min, Double max) {
-      Set<ProductDTO> products = new HashSet<>();
-      productRepository.findByPriceBetween(min, max)
-              .stream()
+    public Page<ProductDTO> findProductsBetween(Double min, Double max, Pageable pageable) {
+      return (Page<ProductDTO>) productRepository.findByPriceBetween(min, max, pageable)
               .filter(Product::getStatus)
-              .forEach(product -> products.add(converterDTO.toDTO(product)));
-
-      return products;
+              .map(converterDTO::toDTO);
     }
 }
