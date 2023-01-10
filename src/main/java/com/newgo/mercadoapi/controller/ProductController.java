@@ -5,6 +5,9 @@ import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import com.newgo.mercadoapi.service.imageproduct.Storage;
 import com.newgo.mercadoapi.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,19 +41,20 @@ public class ProductController {
     @GetMapping("/managed-products/products/all")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
-    public ResponseEntity<Object> getAllProdutos() {
+    public ResponseEntity<Object> getAllProdutos(Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize(),pageable.getSort());
         return ResponseEntity
                 .ok()
-                .body(productService.findAll());
+                .body(productService.findAll(pageable));
     }
 
     @GetMapping("/products/all")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
-    public ResponseEntity<Object> getOnlyActivatedProdutos() {
+    public ResponseEntity<Object> getOnlyActivatedProdutos(Pageable pageable) {
         return ResponseEntity
                 .ok()
-                .body(productService.findAllByAtivadoIsTrue());
+                .body(productService.findAllByAtivadoIsTrue(pageable));
     }
 
     @GetMapping("/managed-products/products/{productId}")
@@ -92,8 +96,9 @@ public class ProductController {
     @PreAuthorize(value = "hasAnyRole('ROLE_ADMINISTRATOR','ROLE_CUSTOMER')")
     public ResponseEntity<Object> findProductsPriceBetween(
             @RequestParam(value = "min" , defaultValue = "0.0") Double min,
-            @RequestParam(value = "max", defaultValue = "999999.9") Double max){
-        return ResponseEntity.ok().body(productService.findProductsBetween(min, max));
+            @RequestParam(value = "max", defaultValue = "999999.9") Double max,
+            Pageable pageable){
+        return ResponseEntity.ok().body(productService.findProductsBetween(min, max, pageable));
     }
 
     @DeleteMapping("/managed-products/product")
