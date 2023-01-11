@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends CrudRepository<Product, UUID> {
+public interface ProductRepository extends CrudRepository<Product, UUID>{
     Optional<Product> findProductByName(String name);
     void deleteProductByName(String name);
     Set<Product> findAllByStatusIsTrue();
@@ -37,4 +37,6 @@ public interface ProductRepository extends CrudRepository<Product, UUID> {
     void setProductStatus(@Param("id") UUID uuid, @Param("newStatus") boolean newStatus);
 
     Set<Product> findByPriceBetween(Double min, Double max);
+    @Query(value = "SELECT p, c.name FROM Product p  JOIN Category  c ON(p.category = c.uuid) WHERE CONCAT(p.name,'',p.description,p.category.name) LIKE %:word%")
+    Set<Product> searchByKeyWord(@Param("word") String keyword);
 }

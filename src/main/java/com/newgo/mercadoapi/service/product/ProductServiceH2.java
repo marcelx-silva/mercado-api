@@ -2,7 +2,9 @@ package com.newgo.mercadoapi.service.product;
 
 import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.mappers.ObjectDTOMapper;
+import com.newgo.mercadoapi.domain.model.Category;
 import com.newgo.mercadoapi.domain.model.Product;
+import com.newgo.mercadoapi.repository.CategoryRepository;
 import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import org.modelmapper.ModelMapper;
@@ -25,11 +27,20 @@ public class ProductServiceH2 implements ProductService {
     ObjectDTOMapper<Product,ProductDTO> converterDTO;
     @Autowired
     ImageProductService imageProductService;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
         Product product = modelMapper.map(productDTO, Product.class);
+        Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
+        if (category.isPresent()){
+            product.setCategory(category.get());
+        }else {
+            product.setCategory(null);
+        }
+
         product.setImageProduct(imageProductService.findByURL(productDTO.getImageProductURL()));
         productRepository.save(product);
     }
@@ -105,6 +116,26 @@ public class ProductServiceH2 implements ProductService {
 
       return products;
     }
+
+    @Override
+    public Set<ProductDTO> searchByKeyWord(String keyWord) {
+        Set<ProductDTO> products = new HashSet<>();
+        System.out.println("Esta vazio: "+(productRepository.searchByKeyWord(keyWord).isEmpty() ? "sim" : "nao"));
+        productRepository.searchByKeyWord(keyWord).forEach(product -> products.add(converterDTO.toDTO(product)));
+        return products;
+    }
+
+    @Override
+    public void updateProductCategory(String category, UUID productId) {
+        Optional<Category> optionalCategory = categoryRepository.findByName(category);
+        if (optionalCategory.isEmpty())
+            throw new RuntimeException();
+            
+        optionalProduct.get().setCategory(optionalCategory.get());
+        productRepository.save(optionalProduct.get());
+    }
+            
+   
     @Override
     public void updateProductPrice(Double price, UUID productId) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
