@@ -18,4 +18,5 @@ public interface ProductService {
     void updateProduct(UUID uuid,ProductDTO productDTO);
     void updateProductStatus(UUID uuid);
     Set<ProductDTO> findProductsBetween(Double min, Double max);
+    void updateProductPrice(Double price, UUID productId);
 }

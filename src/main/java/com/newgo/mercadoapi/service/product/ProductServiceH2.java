@@ -105,4 +105,13 @@ public class ProductServiceH2 implements ProductService {
 
       return products;
     }
+    @Override
+    public void updateProductPrice(Double price, UUID productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new RuntimeException();
+
+        optionalProduct.get().setPrice(price);
+        productRepository.save(optionalProduct.get());
+    }
 }
