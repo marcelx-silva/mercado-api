@@ -2,21 +2,22 @@ package com.newgo.mercadoapi.repository;
 
 import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Repository
-public interface ProductRepository extends CrudRepository<Product, UUID>{
+public interface ProductRepository extends JpaRepository<Product, UUID> {
     Optional<Product> findProductByName(String name);
     void deleteProductByName(String name);
-    Set<Product> findAllByStatusIsTrue();
+    Page<Product> findAllByStatusIsTrue(Pageable pageable);
     @Modifying
     @Query(value =
             "UPDATE Product p " +
@@ -36,7 +37,9 @@ public interface ProductRepository extends CrudRepository<Product, UUID>{
     @Query(value = "UPDATE Product p SET p.status =:newStatus WHERE p.uuid =:id")
     void setProductStatus(@Param("id") UUID uuid, @Param("newStatus") boolean newStatus);
 
-    Set<Product> findByPriceBetween(Double min, Double max);
+    Page<Product> findByPriceBetween(Double min, Double max, Pageable pageable);  
+    
     @Query(value = "SELECT p, c.name FROM Product p  JOIN Category  c ON(p.category = c.uuid) WHERE CONCAT(p.name,'',p.description,p.category.name) LIKE %:word%")
     Set<Product> searchByKeyWord(@Param("word") String keyword);
 }
+  
