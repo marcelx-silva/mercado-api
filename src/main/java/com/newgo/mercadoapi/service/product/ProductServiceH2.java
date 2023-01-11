@@ -25,6 +25,8 @@ public class ProductServiceH2 implements ProductService {
     @Autowired
     ProductRepository productRepository;
     @Autowired
+    ModelMapper modelMapper;
+    @Autowired
     ObjectDTOMapper<Product,ProductDTO> converterDTO;
     @Autowired
     ImageProductService imageProductService;
@@ -34,7 +36,7 @@ public class ProductServiceH2 implements ProductService {
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
-        Product product = converterDTO.toObject(productDTO);
+        Product product = modelMapper.map(productDTO,Product.class);
         Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
         if (category.isPresent()){
             product.setCategory(category.get());
@@ -104,17 +106,15 @@ public class ProductServiceH2 implements ProductService {
 
     @Override
     public Page<ProductDTO> findProductsBetween(Double min, Double max, Pageable pageable) {
-      return (Page<ProductDTO>) productRepository.findByPriceBetween(min, max, pageable)
-              .filter(Product::getStatus)
+      return  productRepository.findByPriceBetween(min, max, pageable)
               .map(converterDTO::toDTO);
     }
 
     @Override
-    public Set<ProductDTO> searchByKeyWord(String keyWord) {
-        Set<ProductDTO> products = new HashSet<>();
-        productRepository.searchByKeyWord(keyWord)
-                .forEach(product -> products.add(converterDTO.toDTO(product)));
-        return products;
+    public Page<ProductDTO> searchByKeyWord(String keyWord, Pageable pageable) {
+        return  productRepository
+                .searchByKeyWord(keyWord, pageable)
+                .map(converterDTO::toDTO);
     }
 
     @Override

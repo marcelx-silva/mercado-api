@@ -20,7 +20,7 @@ public interface ProductService {
     void updateProduct(UUID uuid,ProductDTO productDTO);
     void updateProductStatus(UUID uuid);
     Page<ProductDTO> findProductsBetween(Double min, Double max, Pageable pageable);
-    Set<ProductDTO> searchByKeyWord(String keyWord);
+    Page<ProductDTO> searchByKeyWord(String keyWord, Pageable pageable);
     void updateProductCategory(String category, UUID productId);
     void updateProductPrice(Double price, UUID productId);
 }
