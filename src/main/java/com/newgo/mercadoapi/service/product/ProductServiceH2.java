@@ -130,13 +130,19 @@ public class ProductServiceH2 implements ProductService {
         Optional<Category> optionalCategory = categoryRepository.findByName(category);
         if (optionalCategory.isEmpty())
             throw new RuntimeException();
-
+            
+        optionalProduct.get().setCategory(optionalCategory.get());
+        productRepository.save(optionalProduct.get());
+    }
+            
+   
+    @Override
+    public void updateProductPrice(Double price, UUID productId) {
         Optional<Product> optionalProduct = productRepository.findById(productId);
         if (optionalProduct.isEmpty())
             throw new RuntimeException();
 
-        optionalProduct.get().setCategory(optionalCategory.get());
+        optionalProduct.get().setPrice(price);
         productRepository.save(optionalProduct.get());
     }
-
 }

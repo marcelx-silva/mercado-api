@@ -140,17 +140,31 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.findById(uuid));
     }
 
+
     @PutMapping("/managed-products/product/{productId}/category")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
     public ResponseEntity<Object> updateProductCategory(@PathVariable("productId") UUID uuid,
                                                         @RequestParam("name") String category) {
-
+                                                        
+       Optional<ProductDTO> product = productService.findById(uuid);
+        if (product.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");                                                 
+                                                        
+       productService.updateProductCategory(category,uuid);
+      
+    }                                                        
+                                                        
+    @PutMapping("/managed-products/product/{productId}/price")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize(value = "hasRole('ROLE_ADMINISTRATOR')")
+    public ResponseEntity<Object> updateProductPrice(@PathVariable("productId") UUID uuid,
+                                                        @RequestParam("price") Double price) {
         Optional<ProductDTO> product = productService.findById(uuid);
         if (product.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");
 
-        productService.updateProductCategory(category,uuid);
+        productService.updateProductPrice(price,uuid);
         return ResponseEntity.ok().body(productService.findById(uuid));
     }
 }

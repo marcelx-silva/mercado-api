@@ -19,4 +19,5 @@ public interface ProductService {
     Set<ProductDTO> findProductsBetween(Double min, Double max);
     Set<ProductDTO> searchByKeyWord(String keyWord);
     void updateProductCategory(String category, UUID productId);
+    void updateProductPrice(Double price, UUID productId);
 }
