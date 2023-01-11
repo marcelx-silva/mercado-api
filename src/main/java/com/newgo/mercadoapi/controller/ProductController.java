@@ -152,7 +152,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product does not exist");                                                 
                                                         
        productService.updateProductCategory(category,uuid);
-      
+        return ResponseEntity.ok().body(productService.findById(uuid));
     }                                                        
                                                         
     @PutMapping("/managed-products/product/{productId}/price")

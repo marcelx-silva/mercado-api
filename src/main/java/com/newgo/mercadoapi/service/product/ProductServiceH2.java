@@ -22,8 +22,6 @@ public class ProductServiceH2 implements ProductService {
     @Autowired
     ProductRepository productRepository;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
     ObjectDTOMapper<Product,ProductDTO> converterDTO;
     @Autowired
     ImageProductService imageProductService;
@@ -33,7 +31,7 @@ public class ProductServiceH2 implements ProductService {
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
-        Product product = modelMapper.map(productDTO, Product.class);
+        Product product = converterDTO.toObject(productDTO);
         Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
         if (category.isPresent()){
             product.setCategory(category.get());
@@ -120,14 +118,18 @@ public class ProductServiceH2 implements ProductService {
     @Override
     public Set<ProductDTO> searchByKeyWord(String keyWord) {
         Set<ProductDTO> products = new HashSet<>();
-        System.out.println("Esta vazio: "+(productRepository.searchByKeyWord(keyWord).isEmpty() ? "sim" : "nao"));
-        productRepository.searchByKeyWord(keyWord).forEach(product -> products.add(converterDTO.toDTO(product)));
+        productRepository.searchByKeyWord(keyWord)
+                .forEach(product -> products.add(converterDTO.toDTO(product)));
         return products;
     }
 
     @Override
     public void updateProductCategory(String category, UUID productId) {
         Optional<Category> optionalCategory = categoryRepository.findByName(category);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new RuntimeException();
+
         if (optionalCategory.isEmpty())
             throw new RuntimeException();
             
