@@ -2,7 +2,9 @@ package com.newgo.mercadoapi.service.product;
 
 import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import com.newgo.mercadoapi.domain.mappers.ObjectDTOMapper;
+import com.newgo.mercadoapi.domain.model.Category;
 import com.newgo.mercadoapi.domain.model.Product;
+import com.newgo.mercadoapi.repository.CategoryRepository;
 import com.newgo.mercadoapi.repository.ProductRepository;
 import com.newgo.mercadoapi.service.imageproduct.ImageProductService;
 import org.modelmapper.ModelMapper;
@@ -23,16 +25,23 @@ public class ProductServiceH2 implements ProductService {
     @Autowired
     ProductRepository productRepository;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
     ObjectDTOMapper<Product,ProductDTO> converterDTO;
     @Autowired
     ImageProductService imageProductService;
+    @Autowired
+    CategoryRepository categoryRepository;
 
     @Override
     @Transactional
     public void save(ProductDTO productDTO) {
-        Product product = modelMapper.map(productDTO, Product.class);
+        Product product = converterDTO.toObject(productDTO);
+        Optional<Category> category = categoryRepository.findByName(productDTO.getCategory());
+        if (category.isPresent()){
+            product.setCategory(category.get());
+        }else {
+            product.setCategory(null);
+        }
+
         product.setImageProduct(imageProductService.findByURL(productDTO.getImageProductURL()));
         productRepository.save(product);
     }
@@ -98,5 +107,38 @@ public class ProductServiceH2 implements ProductService {
       return (Page<ProductDTO>) productRepository.findByPriceBetween(min, max, pageable)
               .filter(Product::getStatus)
               .map(converterDTO::toDTO);
+    }
+
+    @Override
+    public Set<ProductDTO> searchByKeyWord(String keyWord) {
+        Set<ProductDTO> products = new HashSet<>();
+        productRepository.searchByKeyWord(keyWord)
+                .forEach(product -> products.add(converterDTO.toDTO(product)));
+        return products;
+    }
+
+    @Override
+    public void updateProductCategory(String category, UUID productId) {
+        Optional<Category> optionalCategory = categoryRepository.findByName(category);
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new RuntimeException();
+
+        if (optionalCategory.isEmpty())
+            throw new RuntimeException();
+            
+        optionalProduct.get().setCategory(optionalCategory.get());
+        productRepository.save(optionalProduct.get());
+    }
+            
+   
+    @Override
+    public void updateProductPrice(Double price, UUID productId) {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty())
+            throw new RuntimeException();
+
+        optionalProduct.get().setPrice(price);
+        productRepository.save(optionalProduct.get());
     }
 }

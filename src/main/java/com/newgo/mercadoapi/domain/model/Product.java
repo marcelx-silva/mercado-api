@@ -27,6 +27,9 @@ public class Product {
     private Integer quantity;
     @Column(name = "price",nullable = false)
     private Double price;
+    @ManyToOne
+    @JoinColumn(name = "category_id",referencedColumnName = "uuid")
+    private Category category;
     @OneToOne
     @JoinColumn(name = "image_id",referencedColumnName = "uuid")
     private ImageProduct imageProduct;

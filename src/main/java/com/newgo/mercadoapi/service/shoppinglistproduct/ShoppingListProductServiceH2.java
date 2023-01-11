@@ -39,7 +39,10 @@ public class ShoppingListProductServiceH2 {
                 .forEach(product -> productDTOs
                         .add(new ProductListDTO(product.getProducts().getName(),
                                 product.getProducts().getDescription(),
-                                product.getAmountProductAdded(), product.getProductPrice())));
+                                product.getAmountProductAdded(),
+                                product.getProductPrice(),
+                                product.getProducts().getCategory() !=null ?
+                                        product.getProducts().getCategory().getName() : "Sem Categoria")));
         return productDTOs;
     }
 

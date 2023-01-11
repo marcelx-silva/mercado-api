@@ -37,5 +37,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     @Query(value = "UPDATE Product p SET p.status =:newStatus WHERE p.uuid =:id")
     void setProductStatus(@Param("id") UUID uuid, @Param("newStatus") boolean newStatus);
 
-    Page<Product> findByPriceBetween(Double min, Double max, Pageable pageable);
+    Page<Product> findByPriceBetween(Double min, Double max, Pageable pageable);  
+    
+    @Query(value = "SELECT p, c.name FROM Product p  JOIN Category  c ON(p.category = c.uuid) WHERE CONCAT(p.name,'',p.description,p.category.name) LIKE %:word%")
+    Set<Product> searchByKeyWord(@Param("word") String keyword);
 }
+  

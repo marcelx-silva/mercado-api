@@ -4,6 +4,7 @@ import com.newgo.mercadoapi.domain.dto.product.ProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -19,4 +20,7 @@ public interface ProductService {
     void updateProduct(UUID uuid,ProductDTO productDTO);
     void updateProductStatus(UUID uuid);
     Page<ProductDTO> findProductsBetween(Double min, Double max, Pageable pageable);
+    Set<ProductDTO> searchByKeyWord(String keyWord);
+    void updateProductCategory(String category, UUID productId);
+    void updateProductPrice(Double price, UUID productId);
 }
